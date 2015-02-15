@@ -11,7 +11,7 @@ $tile_id = 0;
 <HTML>
 <head>
   <script language="JavaScript">
-    var target_tile = null;
+    var target_tile = null; //This contains the element for the current tile that is being used as the origin for menus, it's set when a menu is opened
     var tile_has_component = false;
     var components = [];
   </script>
@@ -33,6 +33,7 @@ $tile_id = 0;
   <div class="menu_item" onClick="hideOptionsMenu(); showComponentsMenu();">- Set component</div>
   <div id="menu_options_toggle_button" class="toggleButtonDisabled" onClick="">- Toggle</div>
   <div id="menu_options_show_points_button" class=" menu_item" onClick"">- Toggle Connections</div>
+  <div class="menu_item" onClick="components[target_tile.id].inputUpdate();">Force Update (Debug)</div>
   <div class="menu_item" onClick="hideOptionsMenu();">Cancel</div>
 </div>
 
@@ -49,13 +50,16 @@ $tile_id = 0;
   <div id="menu_connect_title">Things go here</div>
   <div id="menu_connect_choices"></div>
   <div class="menu_item" onClick="hideConnectMenu(); showConnectionListMenu();">Current Connections</div>
-  <div class="menu_item" onClick="hideConnectMenu(); togglePoints(target_tile.id);">Cancel</div>
+  <div class="menu_item" onClick="hideConnectMenu();">Cancel</div>
 </div>
 
 <div id="menu_connection_list" class="componentsMenu">
   <div id="menu_connection_list_contents"></div>
+  <div class="menu_item" onClick="">Disconnect All</div>
   <div class="menu_item" onClick="hideConnectionListMenu();">Close</div>
 </div>
+
+<div id="lineContainer" class="lineContainer"></div>
 
 <div>
   <div id="grid" class="grid">

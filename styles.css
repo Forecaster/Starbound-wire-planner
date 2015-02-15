@@ -46,7 +46,7 @@ div.tile
 
   padding: 10px;
 
-  z-index: 100;
+  z-index: 1000;
 }
 
 .pnt
@@ -120,4 +120,25 @@ div.tile
   left: auto;
   right: 0;
   bottom: 0;
+}
+
+div.lineContainer
+{
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: visible;
+  z-index: 500;
+}
+
+svg.lineContainer
+{
+  overflow: visible;
+  z-index: 500;
+}
+
+.connectionLine
+{
+  stroke: red;
+  stroke-width: 6px;
 }

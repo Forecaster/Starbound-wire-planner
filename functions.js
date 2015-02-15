@@ -1,3 +1,8 @@
+function add(x, y)
+{
+  return (x + y);
+}
+
 function showOptionsMenu(forTile)
 {
   target_tile = document.getElementById(forTile);
@@ -102,9 +107,15 @@ function togglePoints(id)
   var element = document.getElementById(id + "_points");
 
   if (element.style.visibility == "hidden")
+  {
     element.style.visibility = "visible";
+    drawConnections();
+  }
   else
+  {
     element.style.visibility = "hidden";
+    clearConnections();
+  }
 }
 
 function showConnectMenu(tile_id, point_id)
@@ -151,24 +162,24 @@ function showConnectMenu(tile_id, point_id)
         {
           if (components[key].connection_1 !== false)
           {
-            str = str + "<div class='menu_item' onClick='hideConnectMenu(); connectComponents(components[target_tile.id], components[\"" + key + "\"], " + point_id + ", 1);'>" + components[key].componentName + " - " + components[key].componentId + " - Input 1</div>";
+            str = str + "<div class='menu_item' onClick='hideConnectMenu(); connectComponents(components[target_tile.id], components[\"" + key + "\"], " + point_id + ", 1);'>- " + components[key].componentName + " - " + components[key].componentId + " - Input 1</div>";
           }
 
           if (components[key].connection_2 !== false)
           {
-            str = str + "<div class='menu_item' onClick='hideConnectMenu(); connectComponents(components[target_tile.id], components[\"" + key + "\"], " + point_id + ", 2);'>" + components[key].componentName + " - " + components[key].componentId + " - Input 2</div>";
+            str = str + "<div class='menu_item' onClick='hideConnectMenu(); connectComponents(components[target_tile.id], components[\"" + key + "\"], " + point_id + ", 2);'>- " + components[key].componentName + " - " + components[key].componentId + " - Input 2</div>";
           }
         }
         else if (inputOutput == "input") //search for valid outputs
         {
           if (components[key].connection_3 !== false)
           {
-            str = str + "<div class='menu_item' onClick='hideConnectMenu(); connectComponents(components[\"" + key + "\"], components[target_tile.id], 3, " + point_id + ");'>" + components[key].componentName + " - " + components[key].componentId + " - Output 1</div>";
+            str = str + "<div class='menu_item' onClick='hideConnectMenu(); connectComponents(components[\"" + key + "\"], components[target_tile.id], 3, " + point_id + ");'>- " + components[key].componentName + " - " + components[key].componentId + " - Output 1</div>";
           }
 
           if (components[key].connection_4 !== false)
           {
-            str = str + "<div class='menu_item' onClick='hideConnectMenu(); connectComponents(components[\"" + key + "\"], components[target_tile.id], 4, " + point_id + ");'>" + components[key].componentName + " - " + components[key].componentId + " - Output 2</div>";
+            str = str + "<div class='menu_item' onClick='hideConnectMenu(); connectComponents(components[\"" + key + "\"], components[target_tile.id], 4, " + point_id + ");'>- " + components[key].componentName + " - " + components[key].componentId + " - Output 2</div>";
           }
         }
       }
@@ -205,7 +216,6 @@ function connectComponents(componentSource, componentTarget, connectionSource, c
 
     if (!duplicateConnection)
     {
-      console.log("1: This is not a duplicate connection!");
       componentTarget.connection_1.push(componentSource);
       if (connectionSource == 1)
         componentSource.connection_1.push(componentTarget);
@@ -216,8 +226,6 @@ function connectComponents(componentSource, componentTarget, connectionSource, c
       else if (connectionSource == 4)
         componentSource.connection_4.push(componentTarget);
     }
-    else
-      console.log("1: Duplicate connection!");
   }
   else if (connectionTarget == 2)
   {
@@ -229,7 +237,6 @@ function connectComponents(componentSource, componentTarget, connectionSource, c
 
     if (!duplicateConnection)
     {
-      console.log("2: This is not a duplicate connection!");
       componentTarget.connection_2.push(componentSource);
       if (connectionSource == 1)
         componentSource.connection_1.push(componentTarget);
@@ -240,8 +247,6 @@ function connectComponents(componentSource, componentTarget, connectionSource, c
       else if (connectionSource == 4)
         componentSource.connection_4.push(componentTarget);
     }
-    else
-      console.log("2: Duplicate connection!");
   }
   else if (connectionTarget == 3)
   {
@@ -253,7 +258,6 @@ function connectComponents(componentSource, componentTarget, connectionSource, c
 
     if (!duplicateConnection)
     {
-      console.log("3: This is not a duplicate connection!");
       componentTarget.connection_3.push(componentSource);
       if (connectionSource == 1)
         componentSource.connection_1.push(componentTarget);
@@ -264,8 +268,6 @@ function connectComponents(componentSource, componentTarget, connectionSource, c
       else if (connectionSource == 4)
         componentSource.connection_4.push(componentTarget);
     }
-    else
-      console.log("3: Duplicate connection!");
   }
   else if (connectionTarget == 4)
   {
@@ -277,7 +279,6 @@ function connectComponents(componentSource, componentTarget, connectionSource, c
 
     if (!duplicateConnection)
     {
-      console.log("4: This is not a duplicate connection!");
       componentTarget.connection_4.push(componentSource);
       if (connectionSource == 1)
         componentSource.connection_1.push(componentTarget);
@@ -288,11 +289,51 @@ function connectComponents(componentSource, componentTarget, connectionSource, c
       else if (connectionSource == 4)
         componentSource.connection_4.push(componentTarget);
     }
-    else
-      console.log("4: Duplicate connection!");
   }
-  else
-    console.log("Wut " + connectionTarget);
+  drawConnections();
+}
+
+function disconnectComponents(componentFrom, componentTo)
+{
+  var sourceId = componentFrom.componentId;
+  var targetId = componentTo.componentId;
+
+  for (var key in componentFrom.connection_3)
+  {
+    if (componentFrom.connection_3[key].componentId == targetId)
+    {
+      componentFrom.connection_3[key].inputUpdate(components[target_tile.id].componentId);
+      delete componentFrom.connection_3[key];
+    }
+  }
+
+  for (var key in componentFrom.connection_4)
+  {
+    if (componentFrom.connection_4[key].componentId == targetId)
+    {
+      componentFrom.connection_4[key].inputUpdate(components[target_tile.id].componentId);
+      delete componentFrom.connection_4[key];
+    }
+  }
+
+  for (var key in componentTo.connection_1)
+  {
+    if (componentTo.connection_1[key].componentId == sourceId)
+    {
+      componentTo.connection_1[key].inputUpdate(components[target_tile.id].componentId);
+      delete componentTo.connection_1[key];
+    }
+  }
+
+  for (var key in componentTo.connection_2)
+  {
+    if (componentTo.connection_2[key].componentId == sourceId)
+    {
+      componentTo.connection_2[key].inputUpdate(components[target_tile.id].componentId);
+      delete componentTo.connection_2[key];
+    }
+  }
+  drawConnections();
 }
 
 function showConnectionListMenu()
@@ -304,9 +345,33 @@ function showConnectionListMenu()
   var str = "";
   if (components[target_tile.id].connection_1 !== false)
   {
-    for (key in components[target_tile.id].connection_1)
+    for (var key in components[target_tile.id].connection_1)
     {
-      str = str + "<div>" + components[target_tile.id].connection_1[key].componentName + " - " + components[target_tile.id].connection_1.componentId + "</div>";
+      str = str + "<div class=\"menu_item\" onClick=\"hideConnectionListMenu(); disconnectComponents(components[target_tile.id], components[target_tile.id].connection_1[" + key + "]);\">" + components[target_tile.id].connection_1[key].componentName + " - " + components[target_tile.id].connection_1[key].componentId + "</div>";
+    }
+  }
+
+  if (components[target_tile.id].connection_2 !== false)
+  {
+    for (var key in components[target_tile.id].connection_2)
+    {
+      str = str + "<div class=\"menu_item\" onClick=\"hideConnectionListMenu(); disconnectComponents(components[target_tile.id], components[target_tile.id].connection_2[" + key + "]);\">" + components[target_tile.id].connection_2[key].componentName + " - " + components[target_tile.id].connection_2[key].componentId + "</div>";
+    }
+  }
+
+  if (components[target_tile.id].connection_3 !== false)
+  {
+    for (var key in components[target_tile.id].connection_3)
+    {
+      str = str + "<div class=\"menu_item\" onClick=\"hideConnectionListMenu(); disconnectComponents(components[target_tile.id], components[target_tile.id].connection_3[" + key + "]);\">" + components[target_tile.id].connection_3[key].componentName + " - " + components[target_tile.id].connection_3[key].componentId + "</div>";
+    }
+  }
+
+  if (components[target_tile.id].connection_4 !== false)
+  {
+    for (var key in components[target_tile.id].connection_4)
+    {
+      str = str + "<div class=\"menu_item\" onClick=\"hideConnectionListMenu(); disconnectComponents(components[target_tile.id], components[target_tile.id].connection_4[" + key + "]);\">" + components[target_tile.id].connection_4[key].componentName + " - " + components[target_tile.id].connection_4[key].componentId + "</div>";
     }
   }
 
@@ -324,4 +389,158 @@ function hideConnectionListMenu()
 
   menuElement.style.top = "-500px";
   menuElement.style.left = "-500px";
+}
+
+function drawConnections()
+{
+  var targets_in_1 = [];
+  var targets_in_2 = [];
+  var targets_out_1 = [];
+  var targets_out_2 = [];
+  if (components[target_tile.id].connection_1 !== false)
+  {
+    for (var key in components[target_tile.id].connection_1)
+    {
+      for (var key_2 in components[target_tile.id].connection_1[key].connection_3)
+      {
+        if (components[target_tile.id].connection_1[key].connection_3[key_2].componentId == target_tile.id)
+        {
+          var id = components[target_tile.id].connection_1[key].componentId + "_outbound_1";
+          var element = document.getElementById(id);
+
+          if (element != null && element != undefined)
+            targets_in_1.push(getPosition(element));
+        }
+      }
+
+      for (var key_2 in components[target_tile.id].connection_1[key].connection_4)
+      {
+        if (components[target_tile.id].connection_1[key].connection_4[key_2].componentId == target_tile.id)
+        {
+          var id = components[target_tile.id].connection_1[key].componentId + "_outbound_2";
+          var element = document.getElementById(id);
+
+          if (element != null && element != undefined)
+            targets_in_1.push(getPosition(element));
+        }
+      }
+    }
+  }
+  if (components[target_tile.id].connection_2 !== false)
+  {
+    for (var key in components[target_tile.id].connection_2)
+    {
+      for (var key_2 in components[target_tile.id].connection_2[key].connection_3)
+      {
+        if (components[target_tile.id].connection_2[key].connection_3[key_2].componentId == target_tile.id)
+        {
+          var id = components[target_tile.id].connection_2[key].componentId + "_outbound_1";
+          var element = document.getElementById(id);
+
+          if (element != null && element != undefined)
+            targets_in_2.push(getPosition(element));
+        }
+      }
+
+      for (var key_2 in components[target_tile.id].connection_2[key].connection_4)
+      {
+        if (components[target_tile.id].connection_2[key].connection_4[key_2].componentId == target_tile.id)
+        {
+          var id = components[target_tile.id].connection_2[key].componentId + "_outbound_2";
+          var element = document.getElementById(id);
+
+          if (element != null && element != undefined)
+            targets_in_2.push(getPosition(element));
+        }
+      }
+    }
+  }
+  if (components[target_tile.id].connection_3 !== false)
+  {
+    for (var key in components[target_tile.id].connection_3)
+    {
+      for (var key_2 in components[target_tile.id].connection_3[key].connection_1)
+      {
+        if (components[target_tile.id].connection_3[key].connection_1[key_2].componentId == target_tile.id)
+        {
+          var id = components[target_tile.id].connection_3[key].componentId + "_inbound_1";
+          var element = document.getElementById(id);
+
+          if (element != null && element != undefined)
+            targets_out_1.push(getPosition(element));
+        }
+      }
+
+      for (var key_2 in components[target_tile.id].connection_3[key].connection_2)
+      {
+        if (components[target_tile.id].connection_3[key].connection_2[key_2].componentId == target_tile.id)
+        {
+          var id = components[target_tile.id].connection_3[key].componentId + "_inbound_2";
+          var element = document.getElementById(id);
+
+          if (element != null && element != undefined)
+            targets_out_1.push(getPosition(element));
+        }
+      }
+    }
+  }
+  if (components[target_tile.id].connection_4 !== false)
+  {
+    for (var key in components[target_tile.id].connection_4)
+    {
+      for (var key_2 in components[target_tile.id].connection_4[key].connection_1)
+      {
+        if (components[target_tile.id].connection_4[key].connection_1[key_2].componentId == target_tile.id)
+        {
+          var id = components[target_tile.id].connection_4[key].componentId + "_inbound_1";
+          var element = document.getElementById(id);
+
+          if (element != null && element != undefined)
+            targets_out_2.push(getPosition(element));
+        }
+      }
+
+      for (var key_2 in components[target_tile.id].connection_4[key].connection_2)
+      {
+        if (components[target_tile.id].connection_4[key].connection_2[key_2].componentId == target_tile.id)
+        {
+          var id = components[target_tile.id].connection_4[key].componentId + "_inbound_2";
+          var element = document.getElementById(id);
+
+          if (element != null && element != undefined)
+            targets_out_2.push(getPosition(element));
+        }
+      }
+    }
+  }
+
+  var lines = "";
+  var originId = target_tile.id;
+  var originPos = getPosition(target_tile.children[originId + "_points"].children[originId + "_inbound_1"]);
+  for (var key in targets_in_1)
+  {
+    lines += "<line class=\"connectionLine\" x1=\"" + add(originPos.x, 10) + "\" y1=\"" + add(originPos.y, 10) + "\" x2=\"" + add(targets_in_1[key].x, 10) + "\" y2=\"" + add(targets_in_1[key].y, 10) + "\"/>";
+  }
+  originPos = getPosition(target_tile.children[originId + "_points"].children[originId + "_inbound_2"]);
+  for (var key in targets_in_2)
+  {
+    lines += "<line class=\"connectionLine\" x1=\"" + add(originPos.x, 10) + "\" y1=\"" + add(originPos.y, 10) + "\" x2=\"" + add(targets_in_2[key].x, 10) + "\" y2=\"" + add(targets_in_2[key].y, 10) + "\"/>";
+  }
+  originPos = getPosition(target_tile.children[originId + "_points"].children[originId + "_outbound_1"]);
+  for (var key in targets_out_1)
+  {
+    lines += "<line class=\"connectionLine\" x1=\"" + add(originPos.x, 10) + "\" y1=\"" + add(originPos.y, 10) + "\" x2=\"" + add(targets_out_1[key].x, 10) + "\" y2=\"" + add(targets_out_1[key].y, 10) + "\"/>";
+  }
+  originPos = getPosition(target_tile.children[originId + "_points"].children[originId + "_outbound_2"]);
+  for (var key in targets_out_2)
+  {
+    lines += "<line class=\"connectionLine\" x1=\"" + add(originPos.x, 10) + "\" y1=\"" + add(originPos.y, 10) + "\" x2=\"" + add(targets_out_2[key].x, 10) + "\" y2=\"" + add(targets_out_2[key].y, 10) + "\"/>";
+  }
+
+  document.getElementById("lineContainer").innerHTML = "<svg class='lineContainer'>" + lines + "</svg>";
+}
+
+function clearConnections()
+{
+  document.getElementById("lineContainer").innerHTML = "";
 }
