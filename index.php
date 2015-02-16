@@ -10,12 +10,6 @@ $tile_id = 0;
 
 <HTML>
 <head>
-  <script language="JavaScript">
-    var target_tile = null; //This contains the element for the current tile that is being used as the origin for menus, it's set when a menu is opened
-    var tile_has_component = false;
-    var components = [];
-  </script>
-
   <title>Starbound Wire Planner Prototype</title>
 
   <link rel="stylesheet" type="text/css" href="styles.css"/>
@@ -32,7 +26,7 @@ $tile_id = 0;
 <div id="menu_options" class="componentsMenu">
   <div class="menu_item" onClick="hideOptionsMenu(); showComponentsMenu();">- Set component</div>
   <div id="menu_options_toggle_button" class="toggleButtonDisabled" onClick="">- Toggle</div>
-  <div id="menu_options_show_points_button" class=" menu_item" onClick"">- Toggle Connections</div>
+  <!--<div id="menu_options_show_points_button" class=" menu_item" onClick"">- Toggle Connections</div>-->
   <div class="menu_item" onClick="components[target_tile.id].inputUpdate();">Force Update (Debug)</div>
   <div class="menu_item" onClick="hideOptionsMenu();">Cancel</div>
 </div>
@@ -61,7 +55,14 @@ $tile_id = 0;
 
 <div id="lineContainer" class="lineContainer"></div>
 
+<div id="main_menu" class="main_menu">
+  <div class="menu_item" onClick="toggleAllPoints();">Toggle Connection Mode</div>
+</div>
+
 <div>
+  <div id="components_bar" class="componentsBar">
+    <div id="" class="component"></div>
+  </div>
   <div id="grid" class="grid">
   <?php
     $row_id = 0;
@@ -71,7 +72,7 @@ $tile_id = 0;
       for ($col_counter = 0; $col_counter < $generate_cols; $col_counter++)
       {
         $tile_pos = $row_id . "-" . $col_counter;
-        echo "<div id=\"tile_" . $tile_pos . "\" class=\"pnt tile\" onClick=\"showOptionsMenu('tile_" . $tile_pos . "');\" title=\"" .$tile_pos . "\">
+        echo "<div id=\"tile_" . $tile_pos . "\" class=\"pnt tile\" onClick=\"activateTile('tile_" . $tile_pos . "');\" title=\"" .$tile_pos . "\">
           <div id=\"tile_" . $tile_pos . "_points\" style=\"visibility: hidden;\">
             <div id=\"tile_" . $tile_pos . "_inbound_1\" class=\"point_inbound point_tl\" onClick=\"showConnectMenu(this.parentElement.parentElement.id, 1);\"></div>
             <div id=\"tile_" . $tile_pos . "_inbound_2\" class=\"point_inbound point_bl\" onClick=\"showConnectMenu(this.parentElement.parentElement.id, 2);\"></div>
@@ -118,5 +119,29 @@ $tile_id = 0;
     ?>
   </div>
 </div>
+
+<script language="JavaScript">
+  var target_tile = null; //This contains the element for the current tile that is being used as the origin for menus, it's set when a menu is opened
+  var tile_has_component = false;
+  var components = [];
+  var playMode = false;
+  var connectionMode = false;
+
+  var componentMenu = [];
+
+  componentMenu.push(new SmallWallSwitch(null));
+  componentMenu.push(new Bulb(null));
+  componentMenu.push(new PersistentSwitch(null));
+
+  var componentsMenuContents = "";
+  for (var key_1 in componentMenu)
+  {
+    var texture = componentMenu[key_1].texture;
+    var name = componentMenu[key_1].componentClassName;
+    componentsMenuContents += "<div id=\"component_" + name + "\" class=\"component\" style=\"background-image: url('" + texture + "'); top: 0; left: 0;\"></div>";
+  }
+  document.getElementById("components_bar").innerHTML = componentsMenuContents;
+</script>
+
 </body>
 </HTML>

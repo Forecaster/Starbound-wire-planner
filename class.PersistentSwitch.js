@@ -2,6 +2,7 @@ function PersistentSwitch(id)
 {
   this.componentId = id;
   this.componentName = "Persistent Switch";
+  this.componentClassName = "persistentSwitch";
 
   this.connection_1 = []; //In 1
   this.connection_2 = []; //In 2
@@ -11,8 +12,8 @@ function PersistentSwitch(id)
 
   this.texture = "assets/persistentswitch.png";
 
-  this.stateOff = "0px 0px";
-  this.stateOn = "-96px 0px";
+  this.stateOff = "-48px 0px";
+  this.stateOn = "0px 0px";
 
   this.currentState = "OFF";
 
@@ -47,7 +48,10 @@ PersistentSwitch.prototype.turnOff = function()
 
 PersistentSwitch.prototype.inputUpdate = function(exclude)
 {
+  console.log("PersistentSwitch update triggered!");
   var state = false;
+  if (this.currentState == "ON")
+    state = true;
   for (var key in this.connection_1)
   {
     if (this.connection_1[key].currentState == "ON" && this.connection_1[key].componentId != exclude)
@@ -59,7 +63,7 @@ PersistentSwitch.prototype.inputUpdate = function(exclude)
 
   for (var key in this.connection_2)
   {
-    if (this.connection_1[key].currentState == "ON" && this.connection_1[key].componentId != exclude)
+    if (this.connection_2[key].currentState == "ON" && this.connection_2[key].componentId != exclude)
     {
       console.log("PersistentSwitch found ON connection on reset!");
       state = false;

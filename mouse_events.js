@@ -58,40 +58,28 @@ function onMouseDown(e)
   
   if (e.button == 0)
   {
-    if (target.className == "fuel_item")
+    if (target.className == "component")
     {
-      selectedFuelItem = parseInt(target.id.substr(target.id.length -1), 10);
-      selectedFuelItem += fuelMenuSteps;
+      //selectedFuelItem = parseInt(target.id.substr(target.id.length -1), 10);
+      //selectedFuelItem += fuelMenuSteps;
       
       dragElement = target;
-      
-      if (shift == 0)
-      {
-        startX = e.clientX;
-        startY = e.clientY;
-        
-        offsetX = extractNumber(target.style.left);
-        offsetY = extractNumber(target.style.top);
-        
-        //document.getElementById("debug").innerHTML = "startX: " + startX + "<br>startY: " + startY + "<br>offsetX: " + offsetX + "<br>offsetY: " + offsetY + "<br>X: " + e.clientX + "<br>Y: " + e.clientY;
-        
-        document.onmousemove = onMouseMove;
-        
-        document.body.focus();
-        
-        return false;
-      }
-      else if (shift == 1)
-      {
-        dragElement.style.top = null;
-        dragElement.style.left = null;
-        
-        mainGui.boiler.fuelItem = fuels[selectedFuelItem];
-        scenes[mainGui.currentScene].log.addItem(fuels[selectedFuelItem], 1); //temporary, remove later!
-        mainGui.updateLog(); //temporary, remove later!
-        
-        return false;
-      }
+
+      dragElement.style.zIndex = 500;
+
+      startX = e.clientX;
+      startY = e.clientY;
+
+      offsetX = extractNumber(target.style.left);
+      offsetY = extractNumber(target.style.top);
+
+      //document.getElementById("debug").innerHTML = "startX: " + startX + "<br>startY: " + startY + "<br>offsetX: " + offsetX + "<br>offsetY: " + offsetY + "<br>X: " + e.clientX + "<br>Y: " + e.clientY;
+
+      document.onmousemove = onMouseMove;
+
+      document.body.focus();
+
+      return false;
     }
   }
 }
@@ -108,63 +96,60 @@ function onMouseMove(e)
     dragElement.style.left = (offsetX + e.clientX - startX) + "px";
     dragElement.style.top = (offsetY + e.clientY - startY) + "px";
   }
-  else if (activeTooltip != null)
-  {
-    activeTooltip.style.left = (e.clientX + 10) + "px";
-    activeTooltip.style.top = (e.clientY) + "px";
-  }
 }
 
 function onMouseUp(e)
 {
-  var fuelSlot = document.getElementById("boiler_fuel_slot");
-  var pos = getPosition(fuelSlot);
-  
-  if (e.button == 0)
+  var tiles = document.getElementsByClassName("tile");
+
+  for (var key_1 in tiles)
   {
-    if (e.clientX < (pos.x + 32) && e.clientX > pos.x)
-      var xOK = true;
-    else
-      var xOK = false;
-    
-    if (e.clientY < (pos.y + 32) && e.clientY > pos.y)
-      var yOK = true;
-    else
-      var yOK = false;
-    
-    if (dragElement != null && xOK && yOK)
+    if (tiles[key_1] != undefined)
     {
-      dragElement.style.top = null;
-      dragElement.style.left = null;
-      
-      mainGui.boiler.fuelItem = fuels[selectedFuelItem];
-      scenes[mainGui.currentScene].log.addItem(fuels[selectedFuelItem], 1); //temporary, remove later!
-      mainGui.updateLog(); //temporary, remove later!
+      var pos = getPosition(tiles[key_1]);
+
+      if (e.button == 0)
+      {
+        if (e.clientX < (pos.x + 48) && e.clientX > pos.x)
+          var xOK = true;
+        else
+          var xOK = false;
+
+        if (e.clientY < (pos.y + 48) && e.clientY > pos.y)
+          var yOK = true;
+        else
+          var yOK = false;
+
+        if (dragElement != null && xOK && yOK)
+        {
+          dragElement.style.top = null;
+          dragElement.style.left = null;
+
+          target_tile = tiles[key_1];
+          setTileToComponent(dragElement.id.replace("component_", ""));
+          dragElement.style.zIndex = null;
+          break;
+        }
+        else if (dragElement != null)
+        {
+          dragElement.style.top = null;
+          dragElement.style.left = null;
+        }
+      }
+      else if (e.button == 1)
+      {
+        if (e.clientX < (pos.x + 48) && e.clientX > pos.x)
+          var xOK = true;
+        else
+          var xOK = false;
+
+        if (e.clientY < (pos.y + 48) && e.clientY > pos.y)
+          var yOK = true;
+        else
+          var yOK = false;
+      }
     }
-    else if (dragElement != null)
-    {
-      dragElement.style.top = null;
-      dragElement.style.left = null;
-    
-      dragElement = null;
-    }
-    document.onmousemove = null;
   }
-  else if (e.button == 1)
-  {
-    if (e.clientX < (pos.x + 32) && e.clientX > pos.x)
-      var xOK = true;
-    else
-      var xOK = false;
-    
-    if (e.clientY < (pos.y + 32) && e.clientY > pos.y)
-      var yOK = true;
-    else
-      var yOK = false;
-    
-    if (mainGui.boiler.fuelItem != null && xOK && yOK)
-    {
-      mainGui.boiler.fuelItem = null;
-    }
-  }
+  dragElement = null;
+  document.onmousemove = null;
 }

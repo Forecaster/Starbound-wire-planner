@@ -3,13 +3,42 @@ body
   background-color: black;
 }
 
+.main_menu
+{
+  color: white;
+  border: 1px solid white;
+  border-radius: 5px;
+  padding: 5px;
+  width: 500px;
+}
+
 .grid
 {
+  background-color: white;
   display: inline-block;
   border: 1px solid white;
-  border-radius: 15px;
+  border-radius: 5px;
   padding: 5px;
   color: white;
+}
+
+.componentsBar
+{
+  display: inline-block;
+  width: 50px;
+  height: 500px;
+  padding: 5px;
+  border: 1px solid white;
+  border-radius: 5px;
+}
+
+.component
+{
+  cursor: pointer;
+  position: relative;
+  margin-bottom: 5px;
+  width: 48px;
+  height: 48px;
 }
 
 .description
@@ -30,7 +59,7 @@ div.tile
   width: 48px;
   height: 48px;
 
-  background-color: white;
+  background-color: black;
 }
 
 .componentsMenu
@@ -127,6 +156,8 @@ div.lineContainer
   position: absolute;
   top: 0;
   left: 0;
+  height: 0;
+  width: 0;
   overflow: visible;
   z-index: 500;
 }
@@ -135,6 +166,8 @@ svg.lineContainer
 {
   overflow: visible;
   z-index: 500;
+  width: 0;
+  height: 0;
 }
 
 .connectionLine

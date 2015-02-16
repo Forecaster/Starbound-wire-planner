@@ -29,20 +29,20 @@ function showOptionsMenu(forTile)
       };
     }
 
-    if (components[target_tile.id] == null || components[target_tile.id] == undefined)
-    {
-      pointsButtonElement.className = "toggleButtonDisabled";
-      pointsButtonElement.onclick = null;
-    }
-    else
-    {
-      pointsButtonElement.className = "toggleButtonEnabled menu_item";
-      pointsButtonElement.onclick = function ()
-      {
-        hideOptionsMenu();
-        togglePoints(target_tile.id);
-      };
-    }
+    //if (components[target_tile.id] == null || components[target_tile.id] == undefined)
+    //{
+    //  pointsButtonElement.className = "toggleButtonDisabled";
+    //  pointsButtonElement.onclick = null;
+    //}
+    //else
+    //{
+    //  pointsButtonElement.className = "toggleButtonEnabled menu_item";
+    //  pointsButtonElement.onclick = function ()
+    //  {
+    //    hideOptionsMenu();
+    //    togglePoints(target_tile.id);
+    //  };
+    //}
 
     menuElement.style.top = (position.y + 15) + "px";
     menuElement.style.left = (position.x + 15) + "px";
@@ -100,6 +100,23 @@ function setTileToComponent(type)
     document.getElementById(target_tile.id + "_outbound_1").style.visibility = "hidden";
   if (components[target_tile.id].connection_4 === false)
     document.getElementById(target_tile.id + "_outbound_2").style.visibility = "hidden";
+
+  if (connectionMode)
+    togglePoints(target_tile.id);
+}
+
+function toggleAllPoints()
+{
+  for (var key_1 in components)
+  {
+    var id = components[key_1].componentId;
+    togglePoints(id);
+  }
+
+  if (connectionMode == true)
+    connectionMode = false;
+  else
+    connectionMode = true;
 }
 
 function togglePoints(id)
@@ -393,148 +410,152 @@ function hideConnectionListMenu()
 
 function drawConnections()
 {
-  var targets_in_1 = [];
-  var targets_in_2 = [];
-  var targets_out_1 = [];
-  var targets_out_2 = [];
-  if (components[target_tile.id].connection_1 !== false)
-  {
-    for (var key in components[target_tile.id].connection_1)
-    {
-      for (var key_2 in components[target_tile.id].connection_1[key].connection_3)
-      {
-        if (components[target_tile.id].connection_1[key].connection_3[key_2].componentId == target_tile.id)
-        {
-          var id = components[target_tile.id].connection_1[key].componentId + "_outbound_1";
-          var element = document.getElementById(id);
-
-          if (element != null && element != undefined)
-            targets_in_1.push(getPosition(element));
-        }
-      }
-
-      for (var key_2 in components[target_tile.id].connection_1[key].connection_4)
-      {
-        if (components[target_tile.id].connection_1[key].connection_4[key_2].componentId == target_tile.id)
-        {
-          var id = components[target_tile.id].connection_1[key].componentId + "_outbound_2";
-          var element = document.getElementById(id);
-
-          if (element != null && element != undefined)
-            targets_in_1.push(getPosition(element));
-        }
-      }
-    }
-  }
-  if (components[target_tile.id].connection_2 !== false)
-  {
-    for (var key in components[target_tile.id].connection_2)
-    {
-      for (var key_2 in components[target_tile.id].connection_2[key].connection_3)
-      {
-        if (components[target_tile.id].connection_2[key].connection_3[key_2].componentId == target_tile.id)
-        {
-          var id = components[target_tile.id].connection_2[key].componentId + "_outbound_1";
-          var element = document.getElementById(id);
-
-          if (element != null && element != undefined)
-            targets_in_2.push(getPosition(element));
-        }
-      }
-
-      for (var key_2 in components[target_tile.id].connection_2[key].connection_4)
-      {
-        if (components[target_tile.id].connection_2[key].connection_4[key_2].componentId == target_tile.id)
-        {
-          var id = components[target_tile.id].connection_2[key].componentId + "_outbound_2";
-          var element = document.getElementById(id);
-
-          if (element != null && element != undefined)
-            targets_in_2.push(getPosition(element));
-        }
-      }
-    }
-  }
-  if (components[target_tile.id].connection_3 !== false)
-  {
-    for (var key in components[target_tile.id].connection_3)
-    {
-      for (var key_2 in components[target_tile.id].connection_3[key].connection_1)
-      {
-        if (components[target_tile.id].connection_3[key].connection_1[key_2].componentId == target_tile.id)
-        {
-          var id = components[target_tile.id].connection_3[key].componentId + "_inbound_1";
-          var element = document.getElementById(id);
-
-          if (element != null && element != undefined)
-            targets_out_1.push(getPosition(element));
-        }
-      }
-
-      for (var key_2 in components[target_tile.id].connection_3[key].connection_2)
-      {
-        if (components[target_tile.id].connection_3[key].connection_2[key_2].componentId == target_tile.id)
-        {
-          var id = components[target_tile.id].connection_3[key].componentId + "_inbound_2";
-          var element = document.getElementById(id);
-
-          if (element != null && element != undefined)
-            targets_out_1.push(getPosition(element));
-        }
-      }
-    }
-  }
-  if (components[target_tile.id].connection_4 !== false)
-  {
-    for (var key in components[target_tile.id].connection_4)
-    {
-      for (var key_2 in components[target_tile.id].connection_4[key].connection_1)
-      {
-        if (components[target_tile.id].connection_4[key].connection_1[key_2].componentId == target_tile.id)
-        {
-          var id = components[target_tile.id].connection_4[key].componentId + "_inbound_1";
-          var element = document.getElementById(id);
-
-          if (element != null && element != undefined)
-            targets_out_2.push(getPosition(element));
-        }
-      }
-
-      for (var key_2 in components[target_tile.id].connection_4[key].connection_2)
-      {
-        if (components[target_tile.id].connection_4[key].connection_2[key_2].componentId == target_tile.id)
-        {
-          var id = components[target_tile.id].connection_4[key].componentId + "_inbound_2";
-          var element = document.getElementById(id);
-
-          if (element != null && element != undefined)
-            targets_out_2.push(getPosition(element));
-        }
-      }
-    }
-  }
-
   var lines = "";
-  var originId = target_tile.id;
-  var originPos = getPosition(target_tile.children[originId + "_points"].children[originId + "_inbound_1"]);
-  for (var key in targets_in_1)
+  for (var key_1 in components)
   {
-    lines += "<line class=\"connectionLine\" x1=\"" + add(originPos.x, 10) + "\" y1=\"" + add(originPos.y, 10) + "\" x2=\"" + add(targets_in_1[key].x, 10) + "\" y2=\"" + add(targets_in_1[key].y, 10) + "\"/>";
-  }
-  originPos = getPosition(target_tile.children[originId + "_points"].children[originId + "_inbound_2"]);
-  for (var key in targets_in_2)
-  {
-    lines += "<line class=\"connectionLine\" x1=\"" + add(originPos.x, 10) + "\" y1=\"" + add(originPos.y, 10) + "\" x2=\"" + add(targets_in_2[key].x, 10) + "\" y2=\"" + add(targets_in_2[key].y, 10) + "\"/>";
-  }
-  originPos = getPosition(target_tile.children[originId + "_points"].children[originId + "_outbound_1"]);
-  for (var key in targets_out_1)
-  {
-    lines += "<line class=\"connectionLine\" x1=\"" + add(originPos.x, 10) + "\" y1=\"" + add(originPos.y, 10) + "\" x2=\"" + add(targets_out_1[key].x, 10) + "\" y2=\"" + add(targets_out_1[key].y, 10) + "\"/>";
-  }
-  originPos = getPosition(target_tile.children[originId + "_points"].children[originId + "_outbound_2"]);
-  for (var key in targets_out_2)
-  {
-    lines += "<line class=\"connectionLine\" x1=\"" + add(originPos.x, 10) + "\" y1=\"" + add(originPos.y, 10) + "\" x2=\"" + add(targets_out_2[key].x, 10) + "\" y2=\"" + add(targets_out_2[key].y, 10) + "\"/>";
+    var targets_in_1 = [];
+    var targets_in_2 = [];
+    var targets_out_1 = [];
+    var targets_out_2 = [];
+    if (components[key_1].connection_1 !== false)
+    {
+      for (var key_2 in components[key_1].connection_1)
+      {
+        for (var key_3 in components[key_1].connection_1[key_2].connection_3)
+        {
+          if (components[key_1].connection_1[key_2].connection_3[key_3].componentId == components[key_1].componentId)
+          {
+            var id = components[key_1].connection_1[key_2].componentId + "_outbound_1";
+            var element = document.getElementById(id);
+
+            if (element != null && element != undefined)
+              targets_in_1.push(getPosition(element));
+          }
+        }
+
+        for (var key_3 in components[key_1].connection_1[key_2].connection_4)
+        {
+          if (components[key_1].connection_1[key_2].connection_4[key_3].componentId == components[key_1])
+          {
+            var id = components[key_1].connection_1[key_2].componentId + "_outbound_2";
+            var element = document.getElementById(id);
+
+            if (element != null && element != undefined)
+              targets_in_1.push(getPosition(element));
+          }
+        }
+      }
+    }
+    if (components[key_1].connection_2 !== false)
+    {
+      for (var key_2 in components[key_1].connection_2)
+      {
+        for (var key_3 in components[key_1].connection_2[key_2].connection_3)
+        {
+          if (components[key_1].connection_2[key_2].connection_3[key_3].componentId == components[key_1].componentId)
+          {
+            var id = components[key_1].connection_2[key_2].componentId + "_outbound_1";
+            var element = document.getElementById(id);
+
+            if (element != null && element != undefined)
+              targets_in_2.push(getPosition(element));
+          }
+        }
+
+        for (var key_3 in components[key_1].connection_2[key_2].connection_4)
+        {
+          if (components[key_1].connection_2[key_2].connection_4[key_3].componentId == components[key_1].componentId)
+          {
+            var id = components[key_1].connection_2[key_2].componentId + "_outbound_2";
+            var element = document.getElementById(id);
+
+            if (element != null && element != undefined)
+              targets_in_2.push(getPosition(element));
+          }
+        }
+      }
+    }
+    if (components[key_1].connection_3 !== false)
+    {
+      for (var key_2 in components[key_1].connection_3)
+      {
+        for (var key_3 in components[key_1].connection_3[key_2].connection_1)
+        {
+          if (components[key_1].connection_3[key_2].connection_1[key_3].componentId == components[key_1].componentId)
+          {
+            var id = components[key_1].connection_3[key_2].componentId + "_inbound_1";
+            var element = document.getElementById(id);
+
+            if (element != null && element != undefined)
+              targets_out_1.push(getPosition(element));
+          }
+        }
+
+        for (var key_3 in components[key_1].connection_3[key_2].connection_2)
+        {
+          if (components[key_1].connection_3[key_2].connection_2[key_3].componentId == components[key_1].componentId)
+          {
+            var id = components[key_1].connection_3[key_2].componentId + "_inbound_2";
+            var element = document.getElementById(id);
+
+            if (element != null && element != undefined)
+              targets_out_1.push(getPosition(element));
+          }
+        }
+      }
+    }
+    if (components[key_1].connection_4 !== false)
+    {
+      for (var key_2 in components[key_1].connection_4)
+      {
+        for (var key_3 in components[key_1].connection_4[key_2].connection_1)
+        {
+          if (components[key_1].connection_4[key_2].connection_1[key_3].componentId == components[key_1].componentId)
+          {
+            var id = components[key_1].connection_4[key_2].componentId + "_inbound_1";
+            var element = document.getElementById(id);
+
+            if (element != null && element != undefined)
+              targets_out_2.push(getPosition(element));
+          }
+        }
+
+        for (var key_3 in components[key_1].connection_4[key_2].connection_2)
+        {
+          if (components[key_1].connection_4[key_2].connection_2[key_3].componentId == components[key_1].componentId)
+          {
+            var id = components[key_1].connection_4[key_2].componentId + "_inbound_2";
+            var element = document.getElementById(id);
+
+            if (element != null && element != undefined)
+              targets_out_2.push(getPosition(element));
+          }
+        }
+      }
+    }
+
+    var originId = components[key_1].componentId;
+    var target_tile = document.getElementById(originId);
+    var originPos = getPosition(target_tile.children[originId + "_points"].children[originId + "_inbound_1"]);
+    for (var key in targets_in_1)
+    {
+      lines += "<line class=\"connectionLine\" x1=\"" + add(originPos.x, 10) + "\" y1=\"" + add(originPos.y, 10) + "\" x2=\"" + add(targets_in_1[key].x, 10) + "\" y2=\"" + add(targets_in_1[key].y, 10) + "\"/>";
+    }
+    originPos = getPosition(target_tile.children[originId + "_points"].children[originId + "_inbound_2"]);
+    for (var key in targets_in_2)
+    {
+      lines += "<line class=\"connectionLine\" x1=\"" + add(originPos.x, 10) + "\" y1=\"" + add(originPos.y, 10) + "\" x2=\"" + add(targets_in_2[key].x, 10) + "\" y2=\"" + add(targets_in_2[key].y, 10) + "\"/>";
+    }
+    originPos = getPosition(target_tile.children[originId + "_points"].children[originId + "_outbound_1"]);
+    for (var key in targets_out_1)
+    {
+      lines += "<line class=\"connectionLine\" x1=\"" + add(originPos.x, 10) + "\" y1=\"" + add(originPos.y, 10) + "\" x2=\"" + add(targets_out_1[key].x, 10) + "\" y2=\"" + add(targets_out_1[key].y, 10) + "\"/>";
+    }
+    originPos = getPosition(target_tile.children[originId + "_points"].children[originId + "_outbound_2"]);
+    for (var key in targets_out_2)
+    {
+      lines += "<line class=\"connectionLine\" x1=\"" + add(originPos.x, 10) + "\" y1=\"" + add(originPos.y, 10) + "\" x2=\"" + add(targets_out_2[key].x, 10) + "\" y2=\"" + add(targets_out_2[key].y, 10) + "\"/>";
+    }
   }
 
   document.getElementById("lineContainer").innerHTML = "<svg class='lineContainer'>" + lines + "</svg>";
@@ -543,4 +564,11 @@ function drawConnections()
 function clearConnections()
 {
   document.getElementById("lineContainer").innerHTML = "";
+}
+
+function activateTile(id)
+{
+  target_tile = document.getElementById(id);
+  if (components[target_tile.id].allowManualToggle && !connectionMode)
+    components[target_tile.id].toggle();
 }
