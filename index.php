@@ -55,6 +55,12 @@ $tile_id = 0;
 
 <div id="lineContainer" class="lineContainer"></div>
 
+<div id="newConnectionContainer" class="lineContainer">
+  <svg class='lineContainer'>
+    <line id="newConnectionLine" class="connectionLine" x1="0" y1="0" x2="0" y2="0"></line>
+  </svg>
+</div>
+
 <div id="main_menu" class="main_menu">
   <div class="menu_item" onClick="toggleAllPoints();">Toggle Connection Mode</div>
 </div>
@@ -74,10 +80,10 @@ $tile_id = 0;
         $tile_pos = $row_id . "-" . $col_counter;
         echo "<div id=\"tile_" . $tile_pos . "\" class=\"pnt tile\" onClick=\"activateTile('tile_" . $tile_pos . "');\" title=\"" .$tile_pos . "\">
           <div id=\"tile_" . $tile_pos . "_points\" style=\"visibility: hidden;\">
-            <div id=\"tile_" . $tile_pos . "_inbound_1\" class=\"point_inbound point_tl\" onClick=\"showConnectMenu(this.parentElement.parentElement.id, 1);\"></div>
-            <div id=\"tile_" . $tile_pos . "_inbound_2\" class=\"point_inbound point_bl\" onClick=\"showConnectMenu(this.parentElement.parentElement.id, 2);\"></div>
-            <div id=\"tile_" . $tile_pos . "_outbound_1\" class=\"point_outbound point_br\" onClick=\"showConnectMenu(this.parentElement.parentElement.id, 3);\"></div>
-            <div id=\"tile_" . $tile_pos . "_outbound_2\" class=\"point_outbound point_tr\" onClick=\"showConnectMenu(this.parentElement.parentElement.id, 4);\"></div>
+            <div id=\"tile_" . $tile_pos . "_inbound_1\" class=\"point_inbound point_tl\" onClick=\"//showConnectMenu(this.parentElement.parentElement.id, 1);\"></div>
+            <div id=\"tile_" . $tile_pos . "_inbound_2\" class=\"point_inbound point_bl\" onClick=\"//showConnectMenu(this.parentElement.parentElement.id, 2);\"></div>
+            <div id=\"tile_" . $tile_pos . "_outbound_3\" class=\"point_outbound point_br\" onClick=\"//showConnectMenu(this.parentElement.parentElement.id, 3);\"></div>
+            <div id=\"tile_" . $tile_pos . "_outbound_4\" class=\"point_outbound point_tr\" onClick=\"//showConnectMenu(this.parentElement.parentElement.id, 4);\"></div>
           </div>
         </div>";
       }
@@ -126,6 +132,7 @@ $tile_id = 0;
   var components = [];
   var playMode = false;
   var connectionMode = false;
+  var drawNewConnection = false;
 
   var componentMenu = [];
 

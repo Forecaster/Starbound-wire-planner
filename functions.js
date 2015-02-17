@@ -1,6 +1,6 @@
-function add(x, y)
+function add(a, b)
 {
-  return (x + y);
+  return (a + b);
 }
 
 function showOptionsMenu(forTile)
@@ -97,9 +97,9 @@ function setTileToComponent(type)
   if (components[target_tile.id].connection_2 === false)
     document.getElementById(target_tile.id + "_inbound_2").style.visibility = "hidden";
   if (components[target_tile.id].connection_3 === false)
-    document.getElementById(target_tile.id + "_outbound_1").style.visibility = "hidden";
+    document.getElementById(target_tile.id + "_outbound_3").style.visibility = "hidden";
   if (components[target_tile.id].connection_4 === false)
-    document.getElementById(target_tile.id + "_outbound_2").style.visibility = "hidden";
+    document.getElementById(target_tile.id + "_outbound_4").style.visibility = "hidden";
 
   if (connectionMode)
     togglePoints(target_tile.id);
@@ -535,23 +535,23 @@ function drawConnections()
     }
 
     var originId = components[key_1].componentId;
-    var target_tile = document.getElementById(originId);
-    var originPos = getPosition(target_tile.children[originId + "_points"].children[originId + "_inbound_1"]);
+    var origin_tile = document.getElementById(originId);
+    var originPos = getPosition(origin_tile.children[originId + "_points"].children[originId + "_inbound_1"]);
     for (var key in targets_in_1)
     {
       lines += "<line class=\"connectionLine\" x1=\"" + add(originPos.x, 10) + "\" y1=\"" + add(originPos.y, 10) + "\" x2=\"" + add(targets_in_1[key].x, 10) + "\" y2=\"" + add(targets_in_1[key].y, 10) + "\"/>";
     }
-    originPos = getPosition(target_tile.children[originId + "_points"].children[originId + "_inbound_2"]);
+    originPos = getPosition(origin_tile.children[originId + "_points"].children[originId + "_inbound_2"]);
     for (var key in targets_in_2)
     {
       lines += "<line class=\"connectionLine\" x1=\"" + add(originPos.x, 10) + "\" y1=\"" + add(originPos.y, 10) + "\" x2=\"" + add(targets_in_2[key].x, 10) + "\" y2=\"" + add(targets_in_2[key].y, 10) + "\"/>";
     }
-    originPos = getPosition(target_tile.children[originId + "_points"].children[originId + "_outbound_1"]);
+    originPos = getPosition(origin_tile.children[originId + "_points"].children[originId + "_outbound_3"]);
     for (var key in targets_out_1)
     {
       lines += "<line class=\"connectionLine\" x1=\"" + add(originPos.x, 10) + "\" y1=\"" + add(originPos.y, 10) + "\" x2=\"" + add(targets_out_1[key].x, 10) + "\" y2=\"" + add(targets_out_1[key].y, 10) + "\"/>";
     }
-    originPos = getPosition(target_tile.children[originId + "_points"].children[originId + "_outbound_2"]);
+    originPos = getPosition(origin_tile.children[originId + "_points"].children[originId + "_outbound_4"]);
     for (var key in targets_out_2)
     {
       lines += "<line class=\"connectionLine\" x1=\"" + add(originPos.x, 10) + "\" y1=\"" + add(originPos.y, 10) + "\" x2=\"" + add(targets_out_2[key].x, 10) + "\" y2=\"" + add(targets_out_2[key].y, 10) + "\"/>";
