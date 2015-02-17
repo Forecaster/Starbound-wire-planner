@@ -106,19 +106,17 @@ function onMouseUp(e)
   {
     if (tiles[key_1] != undefined)
     {
+      var xOK = false;
+      var yOK = false;
       var pos = getPosition(tiles[key_1]);
 
       if (e.button == 0)
       {
         if (e.clientX < (pos.x + 48) && e.clientX > pos.x)
-          var xOK = true;
-        else
-          var xOK = false;
+          xOK = true;
 
         if (e.clientY < (pos.y + 48) && e.clientY > pos.y)
-          var yOK = true;
-        else
-          var yOK = false;
+          yOK = true;
 
         if (dragElement != null && xOK && yOK)
         {
@@ -139,14 +137,10 @@ function onMouseUp(e)
       else if (e.button == 1)
       {
         if (e.clientX < (pos.x + 48) && e.clientX > pos.x)
-          var xOK = true;
-        else
-          var xOK = false;
+          xOK = true;
 
         if (e.clientY < (pos.y + 48) && e.clientY > pos.y)
-          var yOK = true;
-        else
-          var yOK = false;
+          yOK = true;
       }
     }
   }
